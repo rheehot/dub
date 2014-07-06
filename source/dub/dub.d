@@ -275,7 +275,7 @@ class Dub {
 	/// Generate project files for a specified IDE.
 	/// Any existing project files will be overridden.
 	void generateProject(string ide, GeneratorSettings settings) {
-		auto generator = createProjectGenerator(ide, m_project, m_packageManager);
+		auto generator = ProjectGenerator.factory(ide, m_project, m_packageManager);
 		if (m_dryRun) return; // TODO: pass m_dryRun to the generator
 		generator.generate(settings);
 	}
@@ -297,7 +297,7 @@ class Dub {
 			if (!config.length) config = m_project.getDefaultConfiguration(settings.platform, true);
 		}
 
-		auto generator = createProjectGenerator("build", m_project, m_packageManager);
+		auto generator = ProjectGenerator.factory("build", m_project, m_packageManager);
 
 		auto test_config = format("__test__%s__", config);
 

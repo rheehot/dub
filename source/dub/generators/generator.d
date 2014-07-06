@@ -8,8 +8,6 @@
 module dub.generators.generator;
 
 import dub.compilers.compiler;
-import dub.generators.build;
-import dub.generators.visuald;
 import dub.internal.vibecompat.core.file;
 import dub.internal.vibecompat.core.log;
 import dub.internal.vibecompat.inet.path;
@@ -28,7 +26,7 @@ import std.string;
 /**
 	Common interface for project generators/builders.
 */
-class ProjectGenerator
+abstract class ProjectGenerator
 {
 	struct TargetInfo {
 		Package pack;
@@ -48,6 +46,35 @@ class ProjectGenerator
 		m_project = project;
 	}
 
+	/// Creates a project generator.
+	/// Params:
+	/// generator_type: Either "build" or "visuald". Represent the generator wanted (see _package dub.generators).
+	/// app: The Project that will be generated.
+	/// mgr: This parameter is currently unused.
+	static ProjectGenerator factory(string generator_type, Project app, PackageManager mgr)
+	{
+		import dub.generators.build : BuildGenerator;
+		import dub.generators.visuald : VisualDGenerator;
+
+		assert(app !is null && mgr !is null, "Project and package manager needed to create a generator.");
+
+		generator_type = generator_type.toLower();
+		switch(generator_type) {
+			default:
+				throw new Exception("Unknown project generator: "~generator_type);
+			case "build":
+				logDebug("Creating build generator.");
+				return new BuildGenerator(app, mgr);
+			case "mono-d":
+				throw new Exception("The Mono-D generator has been removed. Use Mono-D's built in DUB support instead.");
+			case "visuald":
+				logDebug("Creating VisualD generator.");
+				return new VisualDGenerator(app, mgr);
+		}
+	}
+
+	/// Entry point to the generator.
+	/// Generate a project (usually build it, or output a project file) according the the given settings.
 	void generate(GeneratorSettings settings)
 	{
 		if (!settings.config.length) settings.config = m_project.getDefaultConfiguration(settings.platform);
@@ -79,9 +106,9 @@ class ProjectGenerator
 		performPostGenerateActions(settings, targets);
 	}
 
-	abstract void generateTargets(GeneratorSettings settings, in TargetInfo[string] targets);
+	abstract protected void generateTargets(GeneratorSettings settings, in TargetInfo[string] targets);
 
-	void performPostGenerateActions(GeneratorSettings settings, in TargetInfo[string] targets) {} // e.g. run the compiled program
+	protected void performPostGenerateActions(GeneratorSettings settings, in TargetInfo[string] targets) {} // e.g. run the compiled program
 
 	private BuildSettings collect(GeneratorSettings settings, Package pack, ref TargetInfo[string] targets, in string[string] configs, ref string[] main_files, string bin_pack)
 	{
@@ -226,29 +253,6 @@ enum BuildMode {
 	//multipleObjects,          /// Generate an object file per module
 	//multipleObjectsPerModule, /// Use the -multiobj switch to generate multiple object files per module
 	//compileOnly               /// Do not invoke the linker (can be done using a post build command)
-}
-
-
-/**
-	Creates a project generator of the given type for the specified project.
-*/
-ProjectGenerator createProjectGenerator(string generator_type, Project app, PackageManager mgr)
-{
-	assert(app !is null && mgr !is null, "Project and package manager needed to create a generator.");
-
-	generator_type = generator_type.toLower();
-	switch(generator_type) {
-		default:
-			throw new Exception("Unknown project generator: "~generator_type);
-		case "build":
-			logDebug("Creating build generator.");
-			return new BuildGenerator(app, mgr);
-		case "mono-d":
-			throw new Exception("The Mono-D generator has been removed. Use Mono-D's built in DUB support instead.");
-		case "visuald":
-			logDebug("Creating VisualD generator.");
-			return new VisualDGenerator(app, mgr);
-	}
 }
 
 
