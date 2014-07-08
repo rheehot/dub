@@ -40,8 +40,12 @@ struct BuildSettings {
 	BuildRequirements requirements;
 	BuildOptions options;
 
-	BuildSettings dup()
-	const {
+	BuildSettings dup() const 
+	out(ret) {
+		assert(ret.targetType == targetType);
+		assert(ret.targetName == targetName);
+		assert(ret.importPaths == importPaths);
+	} body {
 		BuildSettings ret;
 		foreach (m; __traits(allMembers, BuildSettings)) {
 			static if (is(typeof(__traits(getMember, ret, m) = __traits(getMember, this, m).dup)))
@@ -49,9 +53,6 @@ struct BuildSettings {
 			else static if (is(typeof(__traits(getMember, ret, m) = __traits(getMember, this, m))))
 				__traits(getMember, ret, m) = __traits(getMember, this, m);
 		}
-		assert(ret.targetType == targetType);
-		assert(ret.targetName == targetName);
-		assert(ret.importPaths == importPaths);
 		return ret;
 	}
 
