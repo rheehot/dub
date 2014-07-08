@@ -824,7 +824,7 @@ class UpgradeCommand : Command {
 	}
 }
 
-class FetchRemoveCommand : Command {
+abstract class FetchRemoveCommand : Command {
 	protected {
 		string m_version;
 		bool m_forceRemove = false;
@@ -845,8 +845,6 @@ class FetchRemoveCommand : Command {
 			"Force deletion of fetched packages with untracked files"
 		]);
 	}
-
-	abstract override int execute(Dub dub, string[] free_args, string[] app_args);
 }
 
 class FetchCommand : FetchRemoveCommand {
@@ -995,8 +993,6 @@ abstract class RegistrationCommand : Command {
 			"Register system-wide instead of user-wide"
 		]);
 	}
-
-	abstract override int execute(Dub dub, string[] free_args, string[] app_args);
 }
 
 class AddPathCommand : RegistrationCommand {
