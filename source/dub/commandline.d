@@ -79,7 +79,7 @@ int runDubCommandLine(string[] args)
 		else if( vquiet ) loglevel = LogLevel.none;
 		else if( quiet ) loglevel = LogLevel.warn;
 		setLogLevel(loglevel);
-	} catch (Throwable e) {
+	} catch (Exception e) {
 		logError("Error processing arguments: %s", e.msg);
 		logDiagnostic("Full exception: %s", e.toString().sanitize);
 		logInfo("Run 'dub help' for usage information.");
@@ -159,7 +159,7 @@ int runDubCommandLine(string[] args)
 	try {
 		cmd.prepare(command_args);
 		enforceUsage(cmd.acceptsAppArgs || app_args.length == 0, cmd.name ~ " doesn't accept application arguments.");
-	} catch (Throwable e) {
+	} catch (Exception e) {
 		logError("Error processing arguments: %s", e.msg);
 		logDiagnostic("Full exception: %s", e.toString().sanitize);
 		logInfo("Run 'dub help' for usage information.");
@@ -201,7 +201,7 @@ int runDubCommandLine(string[] args)
 		logInfo(`Run "dub %s -h" for more information about the "%s" command.`, cmdname, cmdname);
 		return 1;
 	}
-	catch (Throwable e) {
+	catch (Exception e) {
 		logError("Error executing command %s: %s\n", cmd.name, e.msg);
 		logDiagnostic("Full exception: %s", e.toString().sanitize);
 		return 2;
