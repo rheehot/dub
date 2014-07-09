@@ -576,11 +576,6 @@ class BuildCommand : GenerateCommand {
 		super.prepare(args);
 		m_generator = "build";
 	}
-
-	override int execute(Dub dub, string[] free_args, string[] app_args)
-	{
-		return super.execute(dub, free_args, app_args);
-	}
 }
 
 class RunCommand : BuildCommand {
