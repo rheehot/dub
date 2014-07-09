@@ -8,6 +8,7 @@
 		"Sönke Ludwig"
 	],
 	"targetPath": "bin",
+	"excludedSourceFiles": [ "source/dub/compilers/*dc.d" ],
 	"configurations": [
 		{
 			"name": "application",
