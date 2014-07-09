@@ -198,8 +198,8 @@ class ProjectGenerator
 
 
 struct GeneratorSettings {
-	BuildPlatform platform;
 	Compiler compiler;
+	BuildPlatform platform;
 	string config;
 	string buildType;
 	BuildSettings buildSettings;

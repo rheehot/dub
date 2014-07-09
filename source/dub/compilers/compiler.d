@@ -168,11 +168,11 @@ void resolveLibs(ref BuildSettings settings)
 	}
 }
 
-interface Compiler {
+const interface Compiler {
 	/// The shortest name of the compiler, lowercased. Eg: "dmd", "gdc", "ldc"
-	@property string name() const;
+	@property string name();
 	/// The path to the binary that was given as a parameter to Compiler.factory.
-	protected @property string binary() const;
+	protected @property string binary();
 
 	/// Returns an instance of a Compiler that represent the binary at path.
 	/// The $PATH variable will be used, so values such as "dmd", "gdc-4.9" are accepted.
@@ -190,13 +190,13 @@ interface Compiler {
 
 	/// Replaces high level fields with low level fields and converts
 	/// dmd flags to compiler-specific flags
-	void prepareBuildSettings(ref BuildSettings settings, BuildSetting supported_fields = BuildSetting.all) const;
+	void prepareBuildSettings(ref BuildSettings settings, BuildSetting supported_fields = BuildSetting.all);
 
 	/// Removes any dflags that match one of the BuildOptions values and populates the BuildSettings.options field.
-	void extractBuildOptions(ref BuildSettings settings) const;
+	void extractBuildOptions(ref BuildSettings settings);
 
 	/// Adds the appropriate flag to set a target path
-	void setTarget(ref BuildSettings settings, in BuildPlatform platform, string targetPath = null) const;
+	void setTarget(ref BuildSettings settings, in BuildPlatform platform, string targetPath = null);
 
 	/// Invokes the compiler using the given flags
 	void invoke(in BuildSettings settings, in BuildPlatform platform, void delegate(int, string) output_callback);

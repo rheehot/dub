@@ -53,7 +53,7 @@ class LdcCompiler : Compiler {
 	private immutable string m_binary;
 	this(string bin) { this.m_binary = bin; }
 
-	BuildPlatform determinePlatform(ref BuildSettings settings, string compiler_binary, string arch_override)
+	BuildPlatform determinePlatform(ref BuildSettings settings, string compiler_binary, string arch_override) const
 	{
 		// TODO: determine platform by invoking the compiler instead
 		BuildPlatform build_platform;
@@ -167,7 +167,7 @@ class LdcCompiler : Compiler {
 		settings.addDFlags("-of"~tpath);
 	}
 
-	void invoke(in BuildSettings settings, in BuildPlatform platform, void delegate(int, string) output_callback)
+	void invoke(in BuildSettings settings, in BuildPlatform platform, void delegate(int, string) output_callback) const
 	{
 		auto res_file = getTempDir() ~ ("dub-build-"~uniform(0, uint.max).to!string~"-.rsp");
 		std.file.write(res_file.toNativeString(), join(cast(string[])settings.dflags, "\n"));
@@ -177,7 +177,7 @@ class LdcCompiler : Compiler {
 		invokeTool([platform.compilerBinary, "@"~res_file.toNativeString()], output_callback);
 	}
 
-	void invokeLinker(in BuildSettings settings, in BuildPlatform platform, string[] objects, void delegate(int, string) output_callback)
+	void invokeLinker(in BuildSettings settings, in BuildPlatform platform, string[] objects, void delegate(int, string) output_callback) const
 	{
 		assert(false, "Separate linking not implemented for LDC");
 	}
