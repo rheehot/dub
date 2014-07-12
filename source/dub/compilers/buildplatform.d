@@ -19,17 +19,16 @@ import std.typecons : Rebindable, rebindable;
 /// Represents a platform a package can be build upon.
 struct BuildPlatform {
 	/// The Compiler to use
-	Rebindable!(const Compiler) _compiler;
+	Rebindable!(const Compiler) compiler;
 	/// e.g. ["posix", "windows"]
 	string[] platform;
 	/// e.g. ["x86", "x86_64"]
 	string[] architecture;
-	/// Canonical compiler name e.g. "dmd"
-	string compiler;
 	/// Compiled frontend version (e.g. 2065)
 	int frontendVersion;
-	
-	enum any = BuildPlatform(rebindable!(const Compiler)(null), null, null, null, -1);
+
+	// @@ BUG 13103 @@
+	enum any = BuildPlatform(rebindable!(const Compiler)(null), null, null, -1);
 	
 	/// Build platforms can be specified via a string specification.
 	///
@@ -69,7 +68,7 @@ struct BuildPlatform {
 			if(splitted.empty)
 				return true;
 		}
-		if (compiler == splitted.front) {
+		if (compiler.name == splitted.front) {
 			splitted.popFront();
 			enforce(splitted.empty, "No valid specification! The compiler has to be the last element!");
 			return true;
@@ -225,7 +224,7 @@ BuildPlatform readPlatformProbe(string output)
 	BuildPlatform build_platform;
 	build_platform.platform = json.platform.get!(Json[]).map!(e => e.get!string()).array();
 	build_platform.architecture = json.architecture.get!(Json[]).map!(e => e.get!string()).array();
-	build_platform.compiler = json.compiler.get!string;
+	build_platform.compiler = Compiler.factory(json.compiler.get!string);
 	build_platform.frontendVersion = json.frontendVersion.get!int;
 	return build_platform;
 }

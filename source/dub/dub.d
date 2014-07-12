@@ -389,7 +389,7 @@ class Dub {
 	{
 		auto dst = Json.emptyObject;
 		dst.configuration = config;
-		dst.compiler = platform.compiler;
+		dst.compiler = platform.compiler.binary;
 		dst.architecture = platform.architecture.serializeToJson();
 		dst.platform = platform.platform.serializeToJson();
 

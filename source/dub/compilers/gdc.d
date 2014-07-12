@@ -79,9 +79,9 @@ class GdcCompiler : Compiler {
 
 		auto build_platform = readPlatformProbe(result.output);
 
-		if (build_platform.compiler != this.name) {
+		if (build_platform.compiler.name != this.name) {
 			logWarn(`The determined compiler type "%s" doesn't match the expected type "%s". This will probably result in build errors.`,
-				build_platform.compiler, this.name);
+				build_platform.compiler.name, this.name);
 		}
 
 		if (arch_override.length && !build_platform.architecture.canFind(arch_override)) {
@@ -199,7 +199,7 @@ class GdcCompiler : Compiler {
 			assert(tpath !is null, "setTarget should be called before invoke");
 			args = [ "ar", "rcs", tpath ] ~ objects;
 		} else {
-			args = platform.compiler ~ objects ~ settings.sourceFiles ~ settings.lflags ~ settings.dflags.filter!(f => isLinkageFlag(f)).array;
+			args = platform.compiler.binary ~ objects ~ settings.sourceFiles ~ settings.lflags ~ settings.dflags.filter!(f => isLinkageFlag(f)).array;
 			version(linux) args ~= "-L--no-as-needed"; // avoids linker errors due to libraries being speficied in the wrong order by DMD
 		}
 		logDiagnostic("%s", args.join(" "));

@@ -76,9 +76,9 @@ class DmdCompiler : Compiler {
 
 		auto build_platform = readPlatformProbe(result.output);
 
-		if (build_platform.compiler != this.name) {
+		if (build_platform.compiler.name != this.name) {
 			logWarn(`The determined compiler type "%s" doesn't match the expected type "%s". This will probably result in build errors.`,
-				build_platform.compiler, this.name);
+				build_platform.compiler.name, this.name);
 		}
 
 		if (arch_override.length && !build_platform.architecture.canFind(arch_override)) {
@@ -193,7 +193,7 @@ class DmdCompiler : Compiler {
 	{
 		import std.string;
 		auto tpath = Path(settings.targetPath) ~ getTargetFileName(settings, platform);
-		auto args = [platform.compiler, "-of"~tpath.toNativeString()];
+		auto args = [platform.compiler.binary, "-of"~tpath.toNativeString()];
 		args ~= objects;
 		args ~= settings.sourceFiles;
 		version(linux) args ~= "-L--no-as-needed"; // avoids linker errors due to libraries being speficied in the wrong order by DMD

@@ -242,7 +242,7 @@ string getTargetFileName(in BuildSettings settings, in BuildPlatform platform)
 			else return settings.targetName;
 		case TargetType.library:
 		case TargetType.staticLibrary:
-			if (platform.platform.canFind("windows") && platform.compiler == "dmd")
+			if (platform.platform.canFind("windows") && platform.compiler.name == "dmd")
 				return settings.targetName ~ ".lib";
 			else return "lib" ~ settings.targetName ~ ".a";
 		case TargetType.dynamicLibrary:

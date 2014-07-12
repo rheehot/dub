@@ -59,7 +59,7 @@ class LdcCompiler : Compiler {
 		BuildPlatform build_platform;
 		build_platform.platform = .determinePlatform();
 		build_platform.architecture = .determineArchitecture();
-		build_platform.compiler = this.name;
+		build_platform.compiler = this;
 
 		switch (arch_override) {
 			default: throw new Exception("Unsupported architecture: "~arch_override);
