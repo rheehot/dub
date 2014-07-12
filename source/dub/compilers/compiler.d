@@ -175,7 +175,7 @@ const interface Compiler {
 	/// The shortest name of the compiler, lowercased. Eg: "dmd", "gdc", "ldc"
 	@property string name();
 	/// The path to the binary that was given as a parameter to Compiler.factory.
-	protected @property string binary();
+	/*protected*/ @property string binary();
 
 	/// Returns an instance of a Compiler that represent the binary at path.
 	/// The $PATH variable will be used, so values such as "dmd", "gdc-4.9" are accepted.

@@ -26,12 +26,10 @@ struct BuildPlatform {
 	string[] architecture;
 	/// Canonical compiler name e.g. "dmd"
 	string compiler;
-	/// Compiler binary name e.g. "ldmd2"
-	string compilerBinary;
 	/// Compiled frontend version (e.g. 2065)
 	int frontendVersion;
 	
-	enum any = BuildPlatform(rebindable!(const Compiler)(null), null, null, null, null, -1);
+	enum any = BuildPlatform(rebindable!(const Compiler)(null), null, null, null, -1);
 	
 	/// Build platforms can be specified via a string specification.
 	///

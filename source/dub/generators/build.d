@@ -196,7 +196,7 @@ class BuildGenerator : ProjectGenerator {
 
 		logDiagnostic("Application output name is '%s'", getTargetFileName(buildsettings, settings.platform));
 
-		string[] flags = ["--build-only", "--compiler="~settings.platform.compilerBinary];
+		string[] flags = ["--build-only", "--compiler="~settings.compiler.binary];
 		if (settings.force) flags ~= "--force";
 		flags ~= buildsettings.dflags;
 		flags ~= mainsrc.relativeTo(cwd).toNativeString();
@@ -377,7 +377,7 @@ class BuildGenerator : ProjectGenerator {
 		if (settings.buildMode == BuildMode.singleFile && generate_binary) {
 			auto lbuildsettings = buildsettings;
 			auto objs = appender!(string[])();
-			logInfo("Compiling using %s...", settings.platform.compilerBinary);
+			logInfo("Compiling using %s...", settings.compiler.binary);
 			foreach (file; buildsettings.sourceFiles.filter!(f=>!isLinkerFile(f))) {
 				logInfo("Compiling %s...", file);
 				objs.put(compileUnit(file, pathToObjName(file), buildsettings, settings));
@@ -394,7 +394,7 @@ class BuildGenerator : ProjectGenerator {
 			      on the other compilers. Later this should be integrated somehow in the build process
 			      (either in the dub.json, or using a command line flag)
 		*/
-		} else if (settings.buildMode == BuildMode.allAtOnce || settings.platform.compilerBinary != "dmd" || !generate_binary || is_static_library) {
+		} else if (settings.buildMode == BuildMode.allAtOnce || settings.compiler.name != "dmd" || !generate_binary || is_static_library) {
 			// setup for command line
 			if (generate_binary) settings.compiler.setTarget(buildsettings, settings.platform);
 			settings.compiler.prepareBuildSettings(buildsettings, BuildSetting.commandLine);
@@ -403,7 +403,7 @@ class BuildGenerator : ProjectGenerator {
 			if (is_static_library) buildsettings.sourceFiles = buildsettings.sourceFiles.filter!(f => !f.isLinkerFile()).array;
 
 			// invoke the compiler
-			logInfo("Running %s...", settings.platform.compilerBinary);
+			logInfo("Running %s...", settings.compiler.binary);
 			settings.compiler.invoke(buildsettings, settings.platform, settings.compileCallback);
 		} else {
 			// determine path for the temporary object file
@@ -423,7 +423,7 @@ class BuildGenerator : ProjectGenerator {
 			buildsettings.sourceFiles = buildsettings.sourceFiles.filter!(f => !isLinkerFile(f)).array;
 			settings.compiler.prepareBuildSettings(buildsettings, BuildSetting.commandLine);
 
-			logInfo("Compiling using %s...", settings.platform.compilerBinary);
+			logInfo("Compiling using %s...", settings.compiler.binary);
 			settings.compiler.invoke(buildsettings, settings.platform, settings.compileCallback);
 
 			logInfo("Linking...");

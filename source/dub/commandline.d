@@ -671,7 +671,7 @@ class TestCommand : PackageBuildCommand {
 
 		GeneratorSettings settings;
 		settings.platform = m_buildPlatform;
-		settings.compiler = Compiler.factory(m_buildPlatform.compilerBinary);
+		settings.compiler = this.m_compiler;
 		settings.buildType = m_buildType;
 		settings.buildMode = m_buildMode;
 		settings.buildSettings = m_buildSettings;

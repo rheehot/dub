@@ -75,7 +75,6 @@ class DmdCompiler : Compiler {
 			binary, result.output));
 
 		auto build_platform = readPlatformProbe(result.output);
-		build_platform.compilerBinary = binary;
 
 		if (build_platform.compiler != this.name) {
 			logWarn(`The determined compiler type "%s" doesn't match the expected type "%s". This will probably result in build errors.`,
@@ -186,8 +185,8 @@ class DmdCompiler : Compiler {
 		std.file.write(res_file.toNativeString(), join(settings.dflags.map!(s => s.canFind(' ') ? "\""~s~"\"" : s), "\n"));
 		scope (exit) remove(res_file.toNativeString());
 
-		logDiagnostic("%s %s", platform.compilerBinary, join(cast(string[])settings.dflags, " "));
-		invokeTool([platform.compilerBinary, "@"~res_file.toNativeString()], output_callback);
+		logDiagnostic("%s %s", binary, join(cast(string[])settings.dflags, " "));
+		invokeTool([binary, "@"~res_file.toNativeString()], output_callback);
 	}
 
 	void invokeLinker(in BuildSettings settings, in BuildPlatform platform, string[] objects, void delegate(int, string) output_callback) const

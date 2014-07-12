@@ -60,7 +60,6 @@ class LdcCompiler : Compiler {
 		build_platform.platform = .determinePlatform();
 		build_platform.architecture = .determineArchitecture();
 		build_platform.compiler = this.name;
-		build_platform.compilerBinary = binary;
 
 		switch (arch_override) {
 			default: throw new Exception("Unsupported architecture: "~arch_override);
@@ -173,8 +172,8 @@ class LdcCompiler : Compiler {
 		std.file.write(res_file.toNativeString(), join(cast(string[])settings.dflags, "\n"));
 		scope (exit) remove(res_file.toNativeString());
 
-		logDiagnostic("%s %s", platform.compilerBinary, join(cast(string[])settings.dflags, " "));
-		invokeTool([platform.compilerBinary, "@"~res_file.toNativeString()], output_callback);
+		logDiagnostic("%s %s", binary, join(cast(string[])settings.dflags, " "));
+		invokeTool([binary, "@"~res_file.toNativeString()], output_callback);
 	}
 
 	void invokeLinker(in BuildSettings settings, in BuildPlatform platform, string[] objects, void delegate(int, string) output_callback) const
