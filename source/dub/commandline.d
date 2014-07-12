@@ -373,7 +373,7 @@ abstract class PackageBuildCommand : Command {
 	protected void setupPackage(Dub dub, string package_name)
 	{
 		m_compiler = Compiler.factory(m_compilerName);
-		m_buildPlatform = m_compiler.determinePlatform(m_buildSettings, m_compilerName, m_arch);
+		m_buildPlatform = m_compiler.determinePlatform(m_buildSettings, m_arch);
 		m_buildSettings.addDebugVersions(m_debugVersions);
 
 		m_defaultConfig = null;

@@ -53,7 +53,7 @@ class DmdCompiler : Compiler {
 	private immutable string m_binary;
 	this(string bin) { this.m_binary = bin; }
 
-	BuildPlatform determinePlatform(ref BuildSettings settings, string compiler_binary, string arch_override) const
+	BuildPlatform determinePlatform(ref BuildSettings settings, string arch_override) const
 	{
 		import std.process;
 		import std.string;
@@ -70,12 +70,12 @@ class DmdCompiler : Compiler {
 		}
 		settings.addDFlags(arch_flags);
 
-		auto result = executeShell(escapeShellCommand(compiler_binary ~ arch_flags ~ ["-quiet", "-run", fil.toNativeString()]));
+		auto result = executeShell(escapeShellCommand(binary ~ arch_flags ~ ["-quiet", "-run", fil.toNativeString()]));
 		enforce(result.status == 0, format("Failed to invoke the compiler %s to determine the build platform: %s",
-			compiler_binary, result.output));
+			binary, result.output));
 
 		auto build_platform = readPlatformProbe(result.output);
-		build_platform.compilerBinary = compiler_binary;
+		build_platform.compilerBinary = binary;
 
 		if (build_platform.compiler != this.name) {
 			logWarn(`The determined compiler type "%s" doesn't match the expected type "%s". This will probably result in build errors.`,

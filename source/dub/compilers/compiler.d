@@ -189,7 +189,7 @@ const interface Compiler {
 		throw new Exception("Unknown compiler: "~binPath);
 	}
 
-	BuildPlatform determinePlatform(ref BuildSettings settings, string compiler_binary, string arch_override = null);
+	BuildPlatform determinePlatform(ref BuildSettings settings, string arch_override = null);
 
 	/// Replaces high level fields with low level fields and converts
 	/// dmd flags to compiler-specific flags

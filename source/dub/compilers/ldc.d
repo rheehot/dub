@@ -53,14 +53,14 @@ class LdcCompiler : Compiler {
 	private immutable string m_binary;
 	this(string bin) { this.m_binary = bin; }
 
-	BuildPlatform determinePlatform(ref BuildSettings settings, string compiler_binary, string arch_override) const
+	BuildPlatform determinePlatform(ref BuildSettings settings, string arch_override) const
 	{
 		// TODO: determine platform by invoking the compiler instead
 		BuildPlatform build_platform;
 		build_platform.platform = .determinePlatform();
 		build_platform.architecture = .determineArchitecture();
 		build_platform.compiler = this.name;
-		build_platform.compilerBinary = compiler_binary;
+		build_platform.compilerBinary = binary;
 
 		switch (arch_override) {
 			default: throw new Exception("Unsupported architecture: "~arch_override);

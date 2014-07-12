@@ -53,7 +53,7 @@ class GdcCompiler : Compiler {
 	private immutable string m_binary;
 	this(string bin) { this.m_binary = bin; }
 
-	BuildPlatform determinePlatform(ref BuildSettings settings, string compiler_binary, string arch_override) const
+	BuildPlatform determinePlatform(ref BuildSettings settings, string arch_override) const
 	{
 		import std.process;
 		import std.string;
@@ -70,15 +70,15 @@ class GdcCompiler : Compiler {
 		}
 		settings.addDFlags(arch_flags);
 
-		auto compiler_result = executeShell(escapeShellCommand(compiler_binary ~ arch_flags ~ ["-o", (getTempDir()~"dub_platform_probe").toNativeString(), fil.toNativeString()]));
+		auto compiler_result = executeShell(escapeShellCommand(this.binary ~ arch_flags ~ ["-o", (getTempDir()~"dub_platform_probe").toNativeString(), fil.toNativeString()]));
 		enforce(compiler_result.status == 0, format("Failed to invoke the compiler %s to determine the build platform: %s",
-			compiler_binary, compiler_result.output));
+			binary, compiler_result.output));
 		auto result = execute([(getTempDir()~"dub_platform_probe").toNativeString()]);
 		enforce(result.status == 0, format("Failed to invoke the build platform probe: %s",
 			result.output));
 
 		auto build_platform = readPlatformProbe(result.output);
-		build_platform.compilerBinary = compiler_binary;
+		build_platform.compilerBinary = binary;
 
 		if (build_platform.compiler != this.name) {
 			logWarn(`The determined compiler type "%s" doesn't match the expected type "%s". This will probably result in build errors.`,
