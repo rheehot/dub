@@ -1,0 +1,4 @@
+name "dubext"
+targetType "dynamicLibrary"
+dependency "dub" path="../../"
+dflags "-defaultlib=libphobos2.so" "-fPIC"
