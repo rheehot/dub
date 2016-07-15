@@ -153,6 +153,7 @@ class GDCCompiler : Compiler {
 			case TargetType.library:
 			case TargetType.staticLibrary:
 				return "lib" ~ settings.targetName ~ ".a";
+			case TargetType.extension:
 			case TargetType.dynamicLibrary:
 				if (platform.platform.canFind("windows"))
 					return settings.targetName ~ ".dll";
@@ -176,7 +177,8 @@ class GDCCompiler : Compiler {
 			case TargetType.object:
 				settings.addDFlags("-c");
 				break;
-			case TargetType.dynamicLibrary:
+            case TargetType.extension:
+            case TargetType.dynamicLibrary:
 				settings.addDFlags("-shared", "-fPIC");
 				break;
 		}

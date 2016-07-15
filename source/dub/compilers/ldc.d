@@ -116,6 +116,7 @@ class LDCCompiler : Compiler {
 		}
 
 		if (settings.options & BuildOption.pic)
+            || settings.targetType == TargetType.extension)
 			settings.addDFlags("-relocation-model=pic");
 
 		assert(fields & BuildSetting.dflags);
@@ -164,7 +165,8 @@ class LDCCompiler : Compiler {
 			case TargetType.staticLibrary:
 				if (generates_coff) return settings.targetName ~ ".lib";
 				else return "lib" ~ settings.targetName ~ ".a";
-			case TargetType.dynamicLibrary:
+			case TargetType.extension:
+            case TargetType.dynamicLibrary:
 				if (platform.platform.canFind("windows"))
 					return settings.targetName ~ ".dll";
 				else return "lib" ~ settings.targetName ~ ".so";
@@ -186,6 +188,7 @@ class LDCCompiler : Compiler {
 			case TargetType.staticLibrary:
 				settings.addDFlags("-lib");
 				break;
+			case TargetType.extension:
 			case TargetType.dynamicLibrary:
 				settings.addDFlags("-shared");
 				break;

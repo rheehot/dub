@@ -159,6 +159,7 @@ class DMDCompiler : Compiler {
 				if (platform.platform.canFind("windows"))
 					return settings.targetName ~ ".lib";
 				else return "lib" ~ settings.targetName ~ ".a";
+            case TargetType.extension:
 			case TargetType.dynamicLibrary:
 				if (platform.platform.canFind("windows"))
 					return settings.targetName ~ ".dll";
@@ -181,6 +182,7 @@ class DMDCompiler : Compiler {
 			case TargetType.staticLibrary:
 				settings.addDFlags("-lib");
 				break;
+			case TargetType.extension:
 			case TargetType.dynamicLibrary:
 				version (Windows) settings.addDFlags("-shared");
 				else version (OSX) settings.addDFlags("-shared");

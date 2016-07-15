@@ -249,6 +249,7 @@ enum TargetType {
 	sourceLibrary,
 	dynamicLibrary,
 	staticLibrary,
+    extension,
 	object
 }
 
