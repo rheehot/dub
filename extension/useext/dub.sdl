@@ -1,0 +1,5 @@
+name "useext"
+ext:dubext {
+  module "version_"
+  file "source/version_.d"
+}
